@@ -1,0 +1,55 @@
+
+
+// 網址:https://blog.csdn.net/yangtrees/article/details/18981267
+// opencv_test.cpp: 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+#include <opencv2\opencv.hpp>  
+#include <opencv2\imgproc\imgproc.hpp>  
+#include <math.h>
+#include <iostream>
+
+#define PI 3.14159265359 
+#define SCREEN_W 1680
+#define SCREEN_H 1050
+#define BORDER 10
+
+using namespace cv;
+using namespace std;
+
+
+int main()
+{
+	Mat src = imread("white2.jpg");
+	Mat logo = imread("apple1.jpg");
+	Mat dst = imread("white2.jpg");
+	Mat imgROI = dst(Rect(30, 30, logo.cols, logo.rows));  //指定插入的大小和位置
+														   //addWeighted(imgROI, 0, logo, 1, 0, imgROI);
+	IplImage *src1 = &IplImage(imgROI);
+	IplImage *logo1 = &IplImage(logo);
+	//IplImage *dst1 = &IplImage(dst);
+
+	cvAnd(src1, logo1, src1);
+	Mat img = cv::cvarrToMat(src1);
+
+	namedWindow("window1");
+	namedWindow("window2");
+	namedWindow("window3");
+	imshow("window1", src);
+	imshow("window2", logo);
+	imshow("window3", dst);
+	waitKey(0);
+
+
+	namedWindow("FullScreen", CV_WINDOW_NORMAL);
+	setWindowProperty("FullScreen", CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
+
+	imshow("FullScreen", dst);
+	waitKey();
+
+
+	return 0;
+	
+
+}

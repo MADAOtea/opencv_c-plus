@@ -1,0 +1,32 @@
+
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+int main() {
+
+	Mat src = imread("white2.jpg");
+	Mat logo = imread("apple1.jpg");
+	Mat dst = imread("white2.jpg");
+	Mat imgROI = dst(Rect(30, 30, logo.cols, logo.rows));  //指定插入的大小和位置
+    //addWeighted(imgROI, 0, logo, 1, 0, imgROI);
+
+	
+
+	IplImage *src1 = &IplImage(imgROI);
+	IplImage *logo1 = &IplImage(logo);
+	//IplImage *dst1 = &IplImage(dst);
+
+	cvAnd(src1, logo1, src1);
+	Mat img = cv::cvarrToMat(src1);
+
+	namedWindow("window1");
+	namedWindow("window2");
+	namedWindow("window3");
+	imshow("window1", src);
+	imshow("window2", logo);
+	imshow("window3", dst);
+	waitKey(0);
+
+	return 0;
+}

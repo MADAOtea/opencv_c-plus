@@ -1,0 +1,87 @@
+
+// opencv_test.cpp: 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+#include <cstdio>
+#include <opencv2/opencv.hpp>
+#include <iostream>
+using namespace cv;
+using namespace std;
+Mat src = imread("white.jpg");
+Mat dst;
+Mat g;
+Mat total;
+
+
+void rotateImage(IplImage* img, IplImage *img_rotate, int degree)
+{
+	//旋?中心??像中心  
+	CvPoint2D32f center;
+	center.x = float(img->width / 2.0 + 0.5);
+	center.y = float(img->height / 2.0 + 0.5);
+	//?算二?旋?的仿射??矩?  
+	float m[6];
+	CvMat M = cvMat(2, 3, CV_32F, m);
+	cv2DRotationMatrix(center, degree, 1, &M);
+	//???像，并用黑色填充其余值  
+	cvWarpAffine(img, img_rotate, &M, CV_INTER_LINEAR + CV_WARP_FILL_OUTLIERS, cvScalarAll(255));
+}
+
+void Get(int i ) {
+
+
+	char num[5] = "" ;
+	sprintf(num, "%d", i);
+	string t(num);
+	t = "fire (" + t + ").jpg";
+	g = imread(t);
+	cout << t << "\n";
+
+}
+
+void Add() {
+	Mat imgROI = dst(Rect(10, 10, g.cols, g.rows));  //指定插入的大小和位置
+
+	IplImage *src1 = &IplImage(imgROI);
+	IplImage *logo1 = &IplImage(g);
+	//IplImage *dst1 = &IplImage(dst);
+
+	cvAnd(src1, logo1, src1);
+
+} // 
+
+int main() {
+	
+	int i = 1;
+	int k = 0;
+
+	while (1) {
+		src.copyTo(dst);
+		Get(i);
+
+		k++;
+		if (k == 5) {
+			i++;
+			k = 0;
+		} // if
+
+		if (i >= 24) {
+			i = 1;
+		} // if
+
+		Add();
+
+		imshow("src1", g);
+		imshow("src2", src);
+		imshow("img", dst);
+
+
+		if (cvWaitKey(1) == 27)
+			break;
+
+	
+	} // while
+
+	return 0;
+}

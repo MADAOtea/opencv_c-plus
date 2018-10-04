@@ -1,0 +1,27 @@
+
+// opencv_test.cpp: 定義主控台應用程式的進入點。
+//
+
+#include "stdafx.h"
+
+#include <iostream>
+#include <opencv2/opencv.hpp>
+
+using namespace cv;
+int main() {
+	Mat src = imread("green.jpg", CV_LOAD_IMAGE_UNCHANGED);
+	Mat logo = imread("OpenCV_Logo_340.jpg", CV_LOAD_IMAGE_UNCHANGED);
+	Mat dst = imread("green.jpg", CV_LOAD_IMAGE_UNCHANGED);
+	Mat imgROI = dst(Rect(30, 30, logo.cols, logo.rows));  //指定插入的大小和位置
+	addWeighted(imgROI, 0.5, logo, 0.5, 0, imgROI);
+
+	namedWindow("window1");
+	namedWindow("window2");
+	namedWindow("window3");
+	imshow("window1", src);
+	imshow("window2", logo);
+	imshow("window3", dst);
+	waitKey(0);
+
+	return 0;
+}
